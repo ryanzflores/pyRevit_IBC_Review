@@ -16,6 +16,9 @@ def allowable_height(group, use, sprinkler, type):
 
     group_i_check(group, use)
 
+    if sprinkler == 'S1' or sprinkler == 'SM':
+        sprinkler = 'S'
+
     height_table = \
         {'A,B,E,F,M,S,U':
              {'ANY': {'NS': {'I-A': 'Unlimited', 'I-B': 160, 'II-A': 65,
@@ -43,8 +46,8 @@ def allowable_height(group, use, sprinkler, type):
                          'II-B': 75, 'III-A': 85, 'III-B': 75,
                          'IV-HT': 85, 'V-A': 70, 'V-B': 60}
                    }
-             },  ######################################################################################################
-         'I': {'1 Condition 1,3':
+             },  #############################################################################################################
+         'I': {'1 Condition 1':
                    {'NS': {'I-A': 'Unlimited', 'I-B': 160, 'II-A': 65,
                            'II-B': 55, 'III-A': 65, 'III-B': 55,
                            'IV-HT': 65, 'V-A': 50, 'V-B': 40},
@@ -52,13 +55,29 @@ def allowable_height(group, use, sprinkler, type):
                           'II-B': 75, 'III-A': 85, 'III-B': 75,
                           'IV-HT': 85, 'V-A': 70, 'V-B': 60}
                     },
-               '1 Condition 2,2':
+               '1 Condition 2':
                    {'NS': {'I-A': 'Unlimited', 'I-B': 160, 'II-A': 65,
                            'II-B': 55, 'III-A': 65, 'III-B': 55,
                            'IV-HT': 65, 'V-A': 50, 'V-B': 40},
                     'S': {'I-A': 'Unlimited', 'I-B': 180, 'II-A': 85,
                           'II-B': 55, 'III-A': 65, 'III-B': 55,
                           'IV-HT': 65, 'V-A': 50, 'V-B': 40}
+                    },
+               '2':
+                   {'NS': {'I-A': 'Unlimited', 'I-B': 160, 'II-A': 65,
+                           'II-B': 55, 'III-A': 65, 'III-B': 55,
+                           'IV-HT': 65, 'V-A': 50, 'V-B': 40},
+                    'S': {'I-A': 'Unlimited', 'I-B': 180, 'II-A': 85,
+                          'II-B': 55, 'III-A': 65, 'III-B': 55,
+                          'IV-HT': 65, 'V-A': 50, 'V-B': 40}
+                    },
+               '3':
+                   {'NS': {'I-A': 'Unlimited', 'I-B': 160, 'II-A': 65,
+                           'II-B': 55, 'III-A': 65, 'III-B': 55,
+                           'IV-HT': 65, 'V-A': 50, 'V-B': 40},
+                    'S': {'I-A': 'Unlimited', 'I-B': 180, 'II-A': 85,
+                          'II-B': 75, 'III-A': 85, 'III-B': 75,
+                          'IV-HT': 85, 'V-A': 70, 'V-B': 60}
                     },
                '4': {'NS': {'I-A': 'Unlimited', 'I-B': 160, 'II-A': 65,
                             'II-B': 55, 'III-A': 65, 'III-B': 55,
@@ -337,8 +356,8 @@ def allowable_area(group, use, sprinkler, type):
             raise ValueError("Invalid input: group R-3 and R-4 must have sprinklers 'NS', 'S13D', "
                              "'S13R', 'S1', or 'SM'")
 
-    group_i_check(group, use)
-    #####################################################################
+    # group_i_check not necessary; use '1' is an expected value for group 'I'
+    #########################################################################################################################
     area_table = \
         {'A': {'1': {'NS': {'I-A': 'Unlimited', 'I-B': 'Unlimited', 'II-A': 15500, 'II-B': 8500,
                             'III-A': 14000, 'III-B': 8500, 'IV-HT': 15000,
@@ -617,8 +636,8 @@ def allowable_area(group, use, sprinkler, type):
 
 def group_i_check(group, use):
     if group == 'I' and use == '1':
-        raise ValueError("Invalid input: group I must have uses '1_Condition_1', "
-                         "'1_Condition_2', 2, or 3")
+        raise ValueError("Invalid input: group I must have uses '1 Condition 1', "
+                         "'1 Condition 2', 2, or 3")
 
 
 def process_table(group, use, sprinkler, type, table):
