@@ -32,11 +32,11 @@ uses_R = ('1', '2', '3', '4')
 types = ('I-A', 'I-B', 'II-A', 'II-B', 'III-A', 'III-B', 'IV-HT', 'V-A', 'V-B')
 
 
-class MakeIntroWindow(forms.WPFWindow):
-    def __init__(self, xaml_file_name, rvt_elements=None):
-        self._export_only = False
+class MyWindow(Windows.Window):
+    def __init__(self):
+        wpf.LoadComponent(self, xamlFile)
 
-        forms.WPFWindow.__init__(self, xaml_file_name)
+        # self.setup_combobox()
 
         self.setup_combobox()
 
@@ -90,31 +90,31 @@ class MakeIntroWindow(forms.WPFWindow):
         self.group_cb.ItemsSource = groups
         self.use_cb.ItemsSource = uses
         self.type_cb.ItemsSource = types
-        self.uses_cb.IsEnabled = False
+        self.use_cb.IsEnabled = False
 
-    def group_changed(self):
+    def group_changed(self, sender, args):
         """Upon the group combobox being changed, updates use options accordingly"""
-        group = self.selected_group()
+        group = self.selected_group
 
-        self.use_changed()
+        # Update sprinklers if necessary (group changed to or from 'R')
+        self.use_changed(None, None)
 
-        # Reset uses to prevent incompatible selections
-        self.uses_cb.SelectedIndex = 0
-
+        self.use_cb.IsEnabled = True
         if group in 'A,H':
-            self.uses_cb.ItemsSource = uses_AH
+            self.use_cb.ItemsSource = uses_AH
         elif group in 'F,S':
-            self.uses_cb.ItemsSource = uses_FS
+            self.use_cb.ItemsSource = uses_FS
         elif group == 'I':
-            self.uses_cb.ItemsSource = uses_I
+            self.use_cb.ItemsSource = uses_I
         elif group == 'R':
-            self.uses_cb.ItemsSource = uses_R
+            self.use_cb.ItemsSource = uses_R
         else:
-            self.uses_cb.IsEnabled = False
+            self.use_cb.ItemsSource = None
+            self.use_cb.IsEnabled = False
 
-    def use_changed(self):
+    def use_changed(self, sender, args):
         """Upon the use combobox being changed, updates sprinkler options for group 'R'"""
-        group = self.selected_group()
+        group = self.selected_group
 
         if group != 'R':
             self.disable_s13d()
@@ -134,32 +134,35 @@ class MakeIntroWindow(forms.WPFWindow):
 
         sprinkler = self.compute_sprinkler()
 
-        height, stories, area = -1
+        if not group or not use or not type or not sprinkler:
+            return
 
-        # Currently hard-coded to only use IBC (2018)
         height = IBC.allowable_height(group, use, sprinkler, type)
         stories = IBC.allowable_stories(group, use, sprinkler, type)
         area = IBC.allowable_area(group, use, sprinkler, type)
 
         result = "Height: " + str(height) + " Stories: " + str(stories) + " Area: " + str(area)
 
+        # TODO: Decide on how to display results to user
         UI.TaskDialog.Show(
             "Results",
             "Results: {}".format(result)
         )
 
-        # if isinstance(height, basestring) or isinstance(stories, basestring) or isinstance(area, basestring):
-
-
     def compute_sprinkler(self):
         """Return a string describing which sprinkler option is checked."""
-        if self.ns_checked():
+        if self.ns_checked:
             return 'NS'
-        elif self.s_s1_checked():
+        elif self.s_s1_checked:
             return 'S1'
-        elif self.s_sm_checked():
+        elif self.s_sm_checked:
             return 'SM'
-        elif self.s13r_checked():
+        elif self.s13r_checked:
             return 'S13R'
-        elif self.s13d_checked():
+        elif self.s13d_checked:
             return 'S13D'
+        else:
+            return None
+
+
+MyWindow().ShowDialog()

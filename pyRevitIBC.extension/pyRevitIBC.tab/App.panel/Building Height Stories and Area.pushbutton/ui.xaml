@@ -1,20 +1,19 @@
-﻿<Window x:Class="pyRevit_App_UI.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:pyRevit_App_UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="449.122" Width="417.421">
+        Title="Height Stories and Area" Height="449.122" Width="387.421">
     <StackPanel Margin="10">
 
-        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Select the group, use, type, and sprinkler classification that you would like to calculate the maximum area &amp; height and stories above the grade plane for. (For mixed use and occupancies, refer to Section 508)" VerticalAlignment="Top" Height="55" Width="389"/>
-        <ComboBox x:Name="group_cb" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="group_changed"/>
-        <ComboBox x:Name="use_cb" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="use_changed"/>
-        <ComboBox x:Name="type_cb" HorizontalAlignment="Left" Margin="10,10,0,10" VerticalAlignment="Top" Width="120" SelectionChanged="type_changed"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Select the group, use, type, and sprinkler classification that you would like to calculate the maximum area &amp; height and stories above the grade plane for. (For mixed use and occupancies, refer to Section 508)" VerticalAlignment="Top" Height="72" Width="339"/>
+        <ComboBox x:Name="group_cb" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="group_changed"/>
+        <ComboBox x:Name="use_cb" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="use_changed"/>
+        <ComboBox x:Name="type_cb" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="120"/>
 
 
-        <RadioButton x:Name="ns_chb" HorizontalAlignment="Left" Margin="10,0,0,0">
+        <RadioButton x:Name="ns_chb" HorizontalAlignment="Left" Margin="10,5,0,0">
             <TextBlock Text="Building is not equipped throughout with an automatic sprinkler system (NS)" TextWrapping="Wrap"/>
         </RadioButton>
         <RadioButton x:Name="s_s1_chb" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top">
@@ -30,7 +29,7 @@
             <TextBlock Text="Building is equipped throughout with an automatic sprinkler system installed in accordance with Section 903.3.1.3 (S13D)" TextWrapping="Wrap"/>
         </RadioButton>
 
-        <Button Content="Continue" HorizontalAlignment="Left" Height="38" Margin="270,0,0,0" VerticalAlignment="Top" Width="114" Click="compute"/>
+        <Button Content="Continue" HorizontalAlignment="Left" Height="38" Margin="220,0,0,0" VerticalAlignment="Top" Width="114" Click="compute"/>
 
     </StackPanel>
 </Window>

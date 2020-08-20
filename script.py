@@ -3,10 +3,12 @@ clr.AddReference('System.Windows.Forms')
 clr.AddReference('IronPython.Wpf')
 
 from pyrevit import forms
+from pyrevit import revit
 from pyrevit import UI
 from pyrevit import script
 xamlFile = script.get_bundle_file('ui.xaml')
 
+from IBC import allowable_height, allowable_stories, allowable_area
 import wpf
 from System import Windows
 
@@ -136,6 +138,9 @@ class MakeIntroWindow(forms.WPFWindow):
 
         height, stories, area = -1
 
+        height = allowable_height(group, use, sprinkler, type)
+        stories = allowable_stories(group, use, sprinkler, type)
+        area = allowable_area(group, use, sprinkler, type)
         # Currently hard-coded to only use IBC (2018)
         height = IBC.allowable_height(group, use, sprinkler, type)
         stories = IBC.allowable_stories(group, use, sprinkler, type)
@@ -143,6 +148,7 @@ class MakeIntroWindow(forms.WPFWindow):
 
         result = "Height: " + str(height) + " Stories: " + str(stories) + " Area: " + str(area)
 
+        # TODO: Decide on how to display results to user
         UI.TaskDialog.Show(
             "Results",
             "Results: {}".format(result)
@@ -163,3 +169,6 @@ class MakeIntroWindow(forms.WPFWindow):
             return 'S13R'
         elif self.s13d_checked():
             return 'S13D'
+
+if __name__ == '__main__':
+    MakeIntroWindow('MakePatternWindow.xaml').show(modal=True)
