@@ -122,7 +122,7 @@ class MyWindow(Windows.Window):
         else:
             self.enable_s13r()
 
-            if self.selected_use in '1,2':
+            if self.selected_use is not None and self.selected_use in '1,2':
                 self.disable_s13d()
             else:
                 self.enable_s13d()
@@ -141,13 +141,22 @@ class MyWindow(Windows.Window):
         stories = IBC.allowable_stories(group, use, sprinkler, type)
         area = IBC.allowable_area(group, use, sprinkler, type)
 
-        result = "Height: " + str(height) + " Stories: " + str(stories) + " Area: " + str(area)
-
-        # TODO: Decide on how to display results to user
-        UI.TaskDialog.Show(
-            "Results",
-            "Results: {}".format(result)
-        )
+        if sprinkler == 'S13R':
+            UI.TaskDialog.Show(
+                "Results",
+                """Max height: {height} Max stories: {stories} \n
+            Max area per story: {area} \n
+            Max area total: {area} x N \n
+            Where N = stories above grade plane, up to four""".format(height=height, stories=stories, area=area)
+            )
+        else:
+            UI.TaskDialog.Show(
+                "Results",
+                """Max height: {height} Max stories: {stories} \n
+            Max area per story: {area} \n
+            Max area total: {area} x N \n
+            Where N = stories above grade plane, up to three""".format(height=height, stories=stories, area=area)
+            )
 
     def compute_sprinkler(self):
         """Return a string describing which sprinkler option is checked."""

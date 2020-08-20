@@ -5,7 +5,7 @@
         xmlns:local="clr-namespace:pyRevit_App_UI"
         mc:Ignorable="d"
         Title="Height Stories and Area" Height="449.122" Width="387.421">
-    <StackPanel Margin="10">
+    <StackPanel Margin="5">
 
         <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Select the group, use, type, and sprinkler classification that you would like to calculate the maximum area &amp; height and stories above the grade plane for. (For mixed use and occupancies, refer to Section 508)" VerticalAlignment="Top" Height="72" Width="339"/>
         <ComboBox x:Name="group_cb" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="group_changed"/>
