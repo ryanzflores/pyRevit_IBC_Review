@@ -2,7 +2,6 @@ import clr
 clr.AddReference('System.Windows.Forms')
 clr.AddReference('IronPython.Wpf')
 
-from pyrevit import forms
 from pyrevit import UI
 from pyrevit import script
 xamlFile = script.get_bundle_file('ui.xaml')
@@ -35,8 +34,6 @@ types = ('I-A', 'I-B', 'II-A', 'II-B', 'III-A', 'III-B', 'IV-HT', 'V-A', 'V-B')
 class MyWindow(Windows.Window):
     def __init__(self):
         wpf.LoadComponent(self, xamlFile)
-
-        # self.setup_combobox()
 
         self.setup_combobox()
 
@@ -141,21 +138,32 @@ class MyWindow(Windows.Window):
         stories = IBC.allowable_stories(group, use, sprinkler, type)
         area = IBC.allowable_area(group, use, sprinkler, type)
 
-        if sprinkler == 'S13R':
+        if stories == 'NP' or area == 'NP':
+            UI.TaskDialog.Show(
+                "Results",
+                "This combination is not permitted"
+            )
+        elif area == 'Unlimited':
             UI.TaskDialog.Show(
                 "Results",
                 """Max height: {height} Max stories: {stories} \n
-            Max area per story: {area} \n
-            Max area total: {area} x N \n
-            Where N = stories above grade plane, up to four""".format(height=height, stories=stories, area=area)
+                Unlimited area"""
+            )
+        elif sprinkler == 'S13R':
+            UI.TaskDialog.Show(
+                "Results",
+                """Max height: {height} Max stories: {stories} \n
+                Max area per story: {area} \n
+                Max area total: {area} x N \n
+                Where N = stories above grade plane, up to four""".format(height=height, stories=stories, area=area)
             )
         else:
             UI.TaskDialog.Show(
                 "Results",
                 """Max height: {height} Max stories: {stories} \n
-            Max area per story: {area} \n
-            Max area total: {area} x N \n
-            Where N = stories above grade plane, up to three""".format(height=height, stories=stories, area=area)
+                Max area per story: {area} \n
+                Max area total: {area} x N \n
+                Where N = stories above grade plane, up to three""".format(height=height, stories=stories, area=area)
             )
 
     def compute_sprinkler(self):
