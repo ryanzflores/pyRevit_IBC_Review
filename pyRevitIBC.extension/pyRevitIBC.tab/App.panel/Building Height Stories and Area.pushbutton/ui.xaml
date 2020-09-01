@@ -7,7 +7,7 @@
         Title="MainWindow" Height="449.122" Width="387.421">
     <StackPanel Margin="10">
         <TextBlock HorizontalAlignment="Left" Margin="10,0,0,0" TextWrapping="Wrap" Text="Building Code Version:" VerticalAlignment="Top" Height="20" Width="339"/>
-        <ComboBox x:Name="code_cb" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="group_changed"/>
+        <ComboBox x:Name="code_cb" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="code_changed"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,5,0,0" TextWrapping="Wrap" Text="Select the group, use, type, and sprinkler classification that you would like to calculate the maximum area &amp; height and stories above the grade plane for. (For mixed use and occupancies, refer to Section 508)" VerticalAlignment="Top" Height="68" Width="339"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Group:" VerticalAlignment="Top" Height="20" Width="339"/>
         <ComboBox x:Name="group_cb" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="group_changed"/>
