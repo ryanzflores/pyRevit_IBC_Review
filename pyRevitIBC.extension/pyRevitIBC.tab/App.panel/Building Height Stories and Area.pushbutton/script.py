@@ -17,7 +17,7 @@ __doc__ = "This tool helps you quickly calculate your building's" \
           'maximum height, stories, and area.'
 
 # To use additional codes, make a module for the code and include its name in this tuple
-available_codes = ("IBC")
+available_codes = ('IBC', '')
 
 """
 groups = ('A', 'B', 'E', 'F', 'H', 'I', 'M', 'R', 'S', 'U')
@@ -82,9 +82,10 @@ class MyWindow(Windows.Window):
     def code_changed(self, sender, args):
         """Upon the code combobox being changed, sets groups and types to appropriate values,
         then calls group_changed to set the appropriate use and sprinkler values"""
-        self.current_table = __import__(self.selected_code)
+        self.current_table = __import__("IBC")
 
         self.groups = self.current_table.table_info.keys()
+        self.groups.sort()
         self.uses = None
         self.types = self.current_table.table_types
 
@@ -148,7 +149,7 @@ class MyWindow(Windows.Window):
         group = self.selected_group
         use = self.selected_use
         type = self.selected_type
-        sprinkler = self.selected_sprinkler
+        sprinkler = self.selected_sprinkler.split(':')[0].split('/')[0]
 
         if not group or not use or not type or not sprinkler:
             return
