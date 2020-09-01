@@ -8,6 +8,35 @@
 
 # Based on the 2018 IBC, Fourth Printing (Jan 2020)
 
+table_name = "IBC, 2018, Fourth Printing (Jan 2020)"
+
+# List groups and their corresponding uses and available sprinklers. Used to fill comboboxes.
+# Format: {groups: ((uses), (sprinklers)), }
+table_info = \
+    {'A': (('1', '2', '3', '4', '5'), ('NS', 'S1', 'SM')),
+     'B': ((), ('NS', 'S1', 'SM')),
+     'E': ((), ('NS', 'S1', 'SM')),
+     'F': (('1', '2'), ('NS', 'S1', 'SM')),
+     'H': (('1', '2', '3', '4', '5'), ('NS', 'S1', 'SM')),
+     'I': (('1 Condition 1', '1 Condition 2', '2', '3', '4'), ('NS', 'S1', 'SM')),
+     'M': ((), ('NS', 'S1', 'SM')),
+     'R': (('1', '2', '3', '4'), ('NS', 'S1', 'SM', 'S13R', 'S13D')),
+     'S': (('1', '2'), ('NS', 'S1', 'SM')),
+     'U': ((), ('NS', 'S1', 'SM'))}
+
+table_sprinklers = \
+    {"NS": "NS: Building is not equipped throughout with an automatic sprinkler system",
+     "S1": "S1/S: Building is a maximum of one story above grade plane, equipped throughout with an automatic"
+           " sprinkler system installed in accordance with Section 903.3.1.1",
+     "SM": "SM/S: Building is two or more stories above grade plane, equipped throughout with an automatic sprinkler "
+           "system installed in accordance with Section 903.3.1.1",
+     "S13R": "S13R: Building is equipped throughout with an automatic sprinkler system installed in accordance with "
+             "Section 903.3.1.2",
+     "S13D": "S13D: Building is equipped throughout with an automatic sprinkler system installed in accordance with "
+             "Section 903.3.1.3"}
+
+table_types = ('I-A', 'I-B', 'II-A', 'II-B', 'III-A', 'III-B', 'IV-HT', 'V-A', 'V-B')
+
 
 # Table 504.3
 def allowable_height(group, use, sprinkler, type):
