@@ -16,6 +16,10 @@ __title__ = 'Chapter\n5\nHelper'
 __doc__ = "This tool helps you quickly calculate your building's" \
           'maximum height, stories, and area.'
 
+# To use additional codes, make a module for the code and include its name in this tuple
+available_codes = ("IBC")
+
+"""
 groups = ('A', 'B', 'E', 'F', 'H', 'I', 'M', 'R', 'S', 'U')
 
 uses = ('1', '2', '3', '4', '5')
@@ -29,13 +33,28 @@ uses_I = ('1 Condition 1', '1 Condition 2', '2', '3', '4')
 uses_R = ('1', '2', '3', '4')
 
 types = ('I-A', 'I-B', 'II-A', 'II-B', 'III-A', 'III-B', 'IV-HT', 'V-A', 'V-B')
-
+"""
 
 class MyWindow(Windows.Window):
+    current_table = None
+
+    groups = None
+
+    uses = None
+
+    types = None
+
+    # Tuple if all uses of the group have the same sprinklers, dict if some uses have different sprinklers
+    sprinklers = None
+
     def __init__(self):
         wpf.LoadComponent(self, xamlFile)
 
         self.setup_combobox()
+
+    @property
+    def selected_code(self):
+        return self.code_cb.SelectedItem
 
     @property
     def selected_group(self):
@@ -50,86 +69,86 @@ class MyWindow(Windows.Window):
         return self.type_cb.SelectedItem
 
     @property
-    def ns_checked(self):
-        return self.ns_chb.IsChecked
-
-    @property
-    def s_s1_checked(self):
-        return self.s_s1_chb.IsChecked
-
-    @property
-    def s_sm_checked(self):
-        return self.s_sm_chb.IsChecked
-
-    @property
-    def s13r_checked(self):
-        return self.s13r_chb.IsChecked
-
-    @property
-    def s13d_checked(self):
-        return self.s13d_chb.IsChecked
-
-    def enable_s13r(self):
-        self.s13r_chb.IsEnabled = True
-
-    def disable_s13r(self):
-        self.s13r_chb.IsChecked = False
-        self.s13r_chb.IsEnabled = False
-
-    def enable_s13d(self):
-        self.s13d_chb.IsEnabled = True
-
-    def disable_s13d(self):
-        self.s13d_chb.IsChecked = False
-        self.s13d_chb.IsEnabled = False
+    def selected_sprinkler(self):
+        return self.sprinkler_cb.SelectedItem
 
     def setup_combobox(self):
-        self.group_cb.ItemsSource = groups
-        self.use_cb.ItemsSource = uses
-        self.type_cb.ItemsSource = types
+        self.code_cb.ItemsSource = available_codes
+        self.group_cb.ItemsSource = self.groups
+        self.use_cb.ItemsSource = self.uses
+        self.type_cb.ItemsSource = self.types
         self.use_cb.IsEnabled = False
+
+    def code_changed(self, sender, args):
+        """Upon the code combobox being changed, sets groups and types to appropriate values,
+        then calls group_changed to set the appropriate use and sprinkler values"""
+        self.current_table = __import__(self.selected_code)
+
+        self.groups = self.current_table.table_info.keys()
+        self.uses = None
+        self.types = self.current_table.table_types
+
+        self.setup_combobox()
 
     def group_changed(self, sender, args):
         """Upon the group combobox being changed, updates use options accordingly"""
         group = self.selected_group
 
-        # Update sprinklers if necessary (group changed to or from 'R')
-        self.use_changed(None, None)
+        if group in self.groups:
+            # If no uses available for current group
+            if not self.current_table.table_info[group][0]:
+                self.uses = None
+                self.use_cb.ItemsSource = self.uses
+                self.use_cb.IsEnabled = False
 
-        self.use_cb.IsEnabled = True
-        if group in 'A,H':
-            self.use_cb.ItemsSource = uses_AH
-        elif group in 'F,S':
-            self.use_cb.ItemsSource = uses_FS
-        elif group == 'I':
-            self.use_cb.ItemsSource = uses_I
-        elif group == 'R':
-            self.use_cb.ItemsSource = uses_R
+            # If there are uses specified for current group
+            else:
+                self.uses = self.current_table.table_info[group][0]
+                self.use_cb.ItemsSource = self.uses
+                self.use_cb.IsEnabled = True
+
+            self.sprinklers = self.current_table.table_info[group][1]
         else:
             self.use_cb.ItemsSource = None
             self.use_cb.IsEnabled = False
 
+        # Update sprinklers if necessary
+        self.use_changed(None, None)
+
     def use_changed(self, sender, args):
         """Upon the use combobox being changed, updates sprinkler options for group 'R'"""
-        group = self.selected_group
+        use = self.selected_use
 
-        if group != 'R':
-            self.disable_s13d()
-            self.disable_s13r()
-        else:
-            self.enable_s13r()
+        self.sprinkler_cb.IsEnabled = True
+        sprinkler_source = []
 
-            if self.selected_use is not None and self.selected_use in '1,2':
-                self.disable_s13d()
-            else:
-                self.enable_s13d()
+        # Handle case where each use has the same set of sprinklers
+        if type(self.sprinklers) is tuple:
+            for sprinkler in self.sprinklers:
+                sprinkler_source.append(self.current_table.table_sprinklers[sprinkler])
+
+        # Handle case where there are different sprinklers for different uses && use is selected
+        elif type(self.sprinklers) is dict and use is not None:
+            for sprinkler in self.sprinklers[use]:
+                sprinkler_source.append(self.current_table.table_sprinklers[sprinkler])
+
+        # Handle case where there are different sprinklers, BUT use is not selected
+        else:  # type(self.sprinklers) is dict and use is None
+            sprinkler_source = None
+            self.sprinkler_cb.IsEnabled = False
+
+            self.sprinkler_cb.ItemsSource = sprinkler_source
+            return
+
+        self.sprinkler_cb.ItemsSource = sprinkler_source
 
     def compute(self, sender, args):
-        group = self.group_cb.SelectedItem
-        use = self.use_cb.SelectedItem
-        type = self.type_cb.SelectedItem
-
-        sprinkler = self.compute_sprinkler()
+        """When user presses continue, if all fields are filled, shows the user the max allowed
+        height, stories, and area for their building"""
+        group = self.selected_group
+        use = self.selected_use
+        type = self.selected_type
+        sprinkler = self.selected_sprinkler
 
         if not group or not use or not type or not sprinkler:
             return
@@ -165,21 +184,6 @@ class MyWindow(Windows.Window):
                 Max area total: {area} x N \n
                 Where N = stories above grade plane, up to three""".format(height=height, stories=stories, area=area)
             )
-
-    def compute_sprinkler(self):
-        """Return a string describing which sprinkler option is checked."""
-        if self.ns_checked:
-            return 'NS'
-        elif self.s_s1_checked:
-            return 'S1'
-        elif self.s_sm_checked:
-            return 'SM'
-        elif self.s13r_checked:
-            return 'S13R'
-        elif self.s13d_checked:
-            return 'S13D'
-        else:
-            return None
 
 
 MyWindow().ShowDialog()
