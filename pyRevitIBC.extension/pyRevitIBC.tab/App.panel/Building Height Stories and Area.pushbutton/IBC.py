@@ -12,6 +12,7 @@ table_name = "IBC, 2018, Fourth Printing (Jan 2020)"
 
 # List groups and their corresponding uses and available sprinklers. Used to fill comboboxes.
 # Format: {groups: ((uses), (sprinklers)), }
+# NOTE: If sprinklers is a dict, then certain uses of the same group have different sprinklers
 table_info = \
     {'A': (('1', '2', '3', '4', '5'), ('NS', 'S1', 'SM')),
      'B': ((), ('NS', 'S1', 'SM')),
@@ -20,7 +21,11 @@ table_info = \
      'H': (('1', '2', '3', '4', '5'), ('NS', 'S1', 'SM')),
      'I': (('1 Condition 1', '1 Condition 2', '2', '3', '4'), ('NS', 'S1', 'SM')),
      'M': ((), ('NS', 'S1', 'SM')),
-     'R': (('1', '2', '3', '4'), ('NS', 'S1', 'SM', 'S13R', 'S13D')),
+     'R': (('1', '2', '3', '4'),
+           {'1': ('NS', 'S1', 'SM', 'S13R'),
+            '2': ('NS', 'S1', 'SM', 'S13R'),
+            '3': ('NS', 'S1', 'SM', 'S13R', 'S13D'),
+            '4': ('NS', 'S1', 'SM', 'S13R', 'S13D')}),
      'S': (('1', '2'), ('NS', 'S1', 'SM')),
      'U': ((), ('NS', 'S1', 'SM'))}
 
