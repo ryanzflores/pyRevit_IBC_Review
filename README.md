@@ -1,16 +1,14 @@
 # pyRevit_IBC_Review
-This [pyRevit](https://github.com/eirannejad/pyRevit) plugin helps users calculate a (single-occupancy*) building's
+This [pyRevit](https://github.com/eirannejad/pyRevit) plugin helps users calculate a (single-occupancy\*) building's
 maximum height, stories, and area, as specified in Chapter 5 of the 2018 International Building Code
 (https://codes.iccsafe.org/content/IBC2018P4/chapter-5-general-building-heights-and-areas).
 The plugin was made to be able to easily accommodate updates to the code and local revisions to the code;
 see the info below for details on how to add different versions to use.
 
-**This plugin is intended to provide a quick estimate, and is not a replacement for a professional code review. 
-This plugin will warn you about some possible complications that can affect the accuracy of the calculations made,
-but these warnings may not be comprehensive.**
+**This plugin is intended to provide a quick estimate, and is not a replacement for a professional code review.**
 
 \* This plugin *can* be used to calculate individual occupancies in a mixed-occupancy building, however,
-sections of Chapter 5 (namely, section 508, 506.2.2, and 506.2.4) complicates things. Please only do so
+sections of Chapter 5 (namely, Sections 508, 506.2.2, and 506.2.4) complicates things. Please only do so
 if you know what you're doing.
 
 ## Installation
