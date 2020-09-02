@@ -722,24 +722,30 @@ def show_results(group, use, sprinkler, type):
         text = "This combination is not permitted"
 
     elif area == 'Unlimited':
-        text = """Max height: {height} Max stories: {stories} \n
-Unlimited area""".format(height=height, stories=stories)
+        text = """Max height: {height} feet \n
+Max stories above grade plane: {stories} \n
+Unlimited area \n
+See Section 507 for further info concerning max height for unlimited area buildings.""".format(height=height, stories=stories)
 
     elif sprinkler == 'S13R':
-        text = """Max height: {height} Max stories: {stories} \n
-Max area per story: {area} \n
-Max area total: {area} x N \n
+        text = """Max height: {height} feet \n
+Max stories above grade plane: {stories} \n
+Max area per story: {area} square feet\n
+Max area total: {area} x N square feet\n
 Where N = stories above grade plane, up to four""".format(height=height, stories=stories, area=area)
 
     else:
-        text = """Max height: {height} Max stories: {stories} \n
-Max area per story: {area} \n
-Max area total: {area} x N \n
+        text = """Max height: {height} feet \n
+Max stories above grade plane: {stories} \n
+Max area per story: {area} square feet \n
+Max area total: {area} x N square feet \n
 Where N = stories above grade plane, up to three""".format(height=height, stories=stories, area=area)
 
-    text = text + "\n "
+    text = text + "\n\nThis is an estimate, and not a replacement for a professional code review. There are many " \
+                  "special exceptions listed in Chapter 5, especially for mixed-occupancy buildings, so please " \
+                  "only use these values as a quick reference."
 
-    components = [TextBox('textbox1', Text=text, Height=200, TextWrapping=0)]
+    components = [TextBox('textbox1', Text=text, Height=250, TextWrapping=0)]
 
     form = FlexForm('Results', components)
     form.show()

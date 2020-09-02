@@ -12,7 +12,7 @@
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Group:" VerticalAlignment="Top" Height="20" Width="339"/>
         <ComboBox x:Name="group_cb" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="group_changed"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Use:" VerticalAlignment="Top" Height="20" Width="339"/>
-        <ComboBox x:Name="use_cb" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="220" SelectionChanged="use_changed"/>
+        <ComboBox x:Name="use_cb" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="use_changed"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Type:" VerticalAlignment="Top" Height="20" Width="339"/>
         <ComboBox x:Name="type_cb" HorizontalAlignment="Left" Margin="10,5,0,0" VerticalAlignment="Top" Width="120"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Sprinkler:" VerticalAlignment="Top" Height="20" Width="339"/>
