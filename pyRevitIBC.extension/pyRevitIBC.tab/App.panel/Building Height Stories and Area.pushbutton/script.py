@@ -19,21 +19,6 @@ __doc__ = "This tool helps you quickly calculate your building's" \
 # To use additional codes, make a module for the code and include its name in this tuple
 available_codes = ('IBC', '')
 
-"""
-groups = ('A', 'B', 'E', 'F', 'H', 'I', 'M', 'R', 'S', 'U')
-
-uses = ('1', '2', '3', '4', '5')
-
-uses_AH = uses
-
-uses_FS = ('1', '2')
-
-uses_I = ('1 Condition 1', '1 Condition 2', '2', '3', '4')
-
-uses_R = ('1', '2', '3', '4')
-
-types = ('I-A', 'I-B', 'II-A', 'II-B', 'III-A', 'III-B', 'IV-HT', 'V-A', 'V-B')
-"""
 
 class MyWindow(Windows.Window):
     current_table = None
@@ -148,43 +133,13 @@ class MyWindow(Windows.Window):
         height, stories, and area for their building"""
         group = self.selected_group
         use = self.selected_use
-        type = self.selected_type
         sprinkler = self.selected_sprinkler.split(':')[0].split('/')[0]
+        type = self.selected_type
 
-        if not group or not use or not type or not sprinkler:
+        if not group or not type or not sprinkler:
             return
 
-        height = IBC.allowable_height(group, use, sprinkler, type)
-        stories = IBC.allowable_stories(group, use, sprinkler, type)
-        area = IBC.allowable_area(group, use, sprinkler, type)
-
-        if stories == 'NP' or area == 'NP':
-            UI.TaskDialog.Show(
-                "Results",
-                "This combination is not permitted"
-            )
-        elif area == 'Unlimited':
-            UI.TaskDialog.Show(
-                "Results",
-                """Max height: {height} Max stories: {stories} \n
-                Unlimited area"""
-            )
-        elif sprinkler == 'S13R':
-            UI.TaskDialog.Show(
-                "Results",
-                """Max height: {height} Max stories: {stories} \n
-                Max area per story: {area} \n
-                Max area total: {area} x N \n
-                Where N = stories above grade plane, up to four""".format(height=height, stories=stories, area=area)
-            )
-        else:
-            UI.TaskDialog.Show(
-                "Results",
-                """Max height: {height} Max stories: {stories} \n
-                Max area per story: {area} \n
-                Max area total: {area} x N \n
-                Where N = stories above grade plane, up to three""".format(height=height, stories=stories, area=area)
-            )
+        self.current_table.show_results(group, use, sprinkler, type)
 
 
 MyWindow().ShowDialog()

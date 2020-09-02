@@ -1,6 +1,7 @@
 """Outputs allowable building height & number of stories
    above grade plane, and allowable area factor"""
 
+from rpw.ui.forms import (FlexForm, TextBox)
 
 # Note: data is formatted specifically to correspond as closely as
 # possible to the tables in the IBC, making the values easy to modify or
@@ -10,7 +11,7 @@
 
 table_name = "IBC, 2018, Fourth Printing (Jan 2020)"
 
-# List groups and their corresponding uses and available sprinklers. Used to fill comboboxes.
+# Dictionary of groups and their corresponding uses and available sprinklers.
 # Format: {groups: ((uses), (sprinklers)), }
 # NOTE: If sprinklers is a dict, then certain uses of the same group have different sprinklers
 table_info = \
@@ -29,6 +30,8 @@ table_info = \
      'S': (('1', '2'), ('NS', 'S1', 'SM')),
      'U': ((), ('NS', 'S1', 'SM'))}
 
+# Dictionary of sprinklers (as listed above in table_info) and the text describing them.
+# Format: {sprinkler: sprinkler_text, }
 table_sprinklers = \
     {"NS": "NS: Building is not equipped throughout with an automatic sprinkler system",
      "S1": "S1/S: Building is a maximum of one story above grade plane, equipped throughout with an automatic"
@@ -40,6 +43,7 @@ table_sprinklers = \
      "S13D": "S13D: Building is equipped throughout with an automatic sprinkler system installed in accordance with "
              "Section 903.3.1.3"}
 
+# A tuple of the available types.
 table_types = ('I-A', 'I-B', 'II-A', 'II-B', 'III-A', 'III-B', 'IV-HT', 'V-A', 'V-B')
 
 
@@ -391,7 +395,6 @@ def allowable_area(group, use, sprinkler, type):
                              "'S13R', 'S1', or 'SM'")
 
     # group_i_check not necessary; use '1' is an expected value for group 'I'
-    #########################################################################################################################
     area_table = \
         {'A': {'1': {'NS': {'I-A': 'Unlimited', 'I-B': 'Unlimited', 'II-A': 15500, 'II-B': 8500,
                             'III-A': 14000, 'III-B': 8500, 'IV-HT': 15000,
@@ -703,3 +706,40 @@ def process_table(group, use, sprinkler, type, table):
             raise ValueError("group found, but use not found!")
 
     raise ValueError("group not found!")
+
+
+def show_results(group, use, sprinkler, type):
+    if not use:
+        use = "ANY"
+
+    height = allowable_height(group, use, sprinkler, type)
+    stories = allowable_stories(group, use, sprinkler, type)
+    area = allowable_area(group, use, sprinkler, type)
+
+    text = ''
+
+    if stories == 'NP' or area == 'NP':
+        text = "This combination is not permitted"
+
+    elif area == 'Unlimited':
+        text = """Max height: {height} Max stories: {stories} \n
+Unlimited area""".format(height=height, stories=stories)
+
+    elif sprinkler == 'S13R':
+        text = """Max height: {height} Max stories: {stories} \n
+Max area per story: {area} \n
+Max area total: {area} x N \n
+Where N = stories above grade plane, up to four""".format(height=height, stories=stories, area=area)
+
+    else:
+        text = """Max height: {height} Max stories: {stories} \n
+Max area per story: {area} \n
+Max area total: {area} x N \n
+Where N = stories above grade plane, up to three""".format(height=height, stories=stories, area=area)
+
+    text = text + "\n "
+
+    components = [TextBox('textbox1', Text=text, Height=200, TextWrapping=0)]
+
+    form = FlexForm('Results', components)
+    form.show()
