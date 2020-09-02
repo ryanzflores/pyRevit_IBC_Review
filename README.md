@@ -5,6 +5,8 @@ maximum height, stories, and area, as specified in Chapter 5 of the 2018 Interna
 The plugin was made to be able to easily accommodate updates to the code and local revisions to the code;
 see the info below for details on how to add different versions to use.
 
+![IBC Demo](https://raw.githubusercontent.com/ryanzflores/pyRevit_IBC_Review/master/pyRevitIBCDemo.gif)
+
 **This plugin is intended to provide a quick estimate, and is not a replacement for a professional code review.**
 
 \* This plugin *can* be used to calculate individual occupancies in a mixed-occupancy building, however,
